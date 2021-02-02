@@ -3,7 +3,7 @@ Prerequisites
 
 **Hardware**
 
-A relatively recent Nvidia GPU is mandatory for the GPU code.
+A relatively recent NVIDIA GPU is mandatory for the GPU code.
 Nothing special is needed for the CPU code.
 
 **Operating Systems and Compilers**
@@ -13,19 +13,20 @@ In order to compile the GPU code, the most recent
 is preferred for the OpenACC directives. Due to its limitations,
 the GPU code is unavailable on macOS.
 
-No effort has been spared on building excutables for Windows yet.
-
 For Linux, we need:
 
 - GNU or Intel Fortran compiler.
 - Recent C++ compiler that supports C++11 syntax.
 - (GPU code only) PGI compiler for OpenACC and nvcc for CUDA.
+- If NVIDIA driver has been installed correctly, *nvidia-smi* should be
+  available.
 
-**FFTW Libraries**
-
-Two prebuilt FFTW libraries: *libfftw3* and *libfftw3_threads* are used by
-Tinker. Two more FFTW libraries, *libfftw3f*, *libfftw3f_threads* are
-needed by the single precision CPU code.
+The PGI compilers have recently been rebranded as
+`NVIDIA HPC SDK <https://developer.nvidia.com/hpc-sdk>`_
+and we successfully built Tinker9 on Windows WSL2 Ubuntu with
+CUDA 11.0 and NVHPC 20.9. Please proceed to
+`this NVIDIA webpage <https://docs.nvidia.com/cuda/wsl-user-guide/index.html>`_
+for more details.
 
 **More About Using PGI Compiler on the Clusters**
 
@@ -48,21 +49,34 @@ reconfigure PGI compiler with gcc 7.4.0:
 
 then added *export PGI_LOCALRC=/path/to/new_config* to my bash resource file.
 
+**FFTW Libraries**
+
+Canonical Tinker requires FFTW libraries because by default it is compiled with OpenMP.
+Otherwise, Tinker will use *FFTPACK*.
+In Tinker9, the underlying *libtinker.a* will be compiled without OpenMP,
+therefore FFTW libraries are no longer mandatory for GPU code.
+
+However, FFTW libraries are required by CPU code.
+Two prebuilt FFTW libraries, *libfftw3* and *libfftw3_threads* are needed by
+the double precision CPU code.
+The other two FFTW libraries, *libfftw3f* and *libfftw3f_threads* are needed by
+the mixed and single precision CPU code.
+
 **Other Nonmandatory Utilities**
 
 - `ClangFormat <https://clang.llvm.org/docs/ClangFormat.html>`_:
   to format the source code.
 
-- `Sphinx <https://www.sphinx-doc.org>`_: to generate user's manual.
+- `Sphinx <https://www.sphinx-doc.org>`_: to generate user manual.
 
    - PDF version also depends on `TeX <https://www.tug.org/begin.html>`_.
 
-   - HTML version requires
-     `sphinx-rtd-theme <https://pypi.org/project/sphinx-rtd-theme>`_
-     from *pip*.
+   - HTML theme from *pip*.
 
-     .. code-block:: bash
+- `Doxygen <https://www.doxygen.nl>`_: to generate developer guides.
 
-        pip install sphinx-rtd-theme
+.. code-block:: bash
 
-- `Doxygen <https://www.doxygen.nl>`_: to generate developer's manual.
+   pip install -U Sphinx
+   pip install 'sphinxcontrib-bibtex==1.0.0'
+   pip install pydata-sphinx-theme

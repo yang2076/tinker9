@@ -9,7 +9,9 @@
 #include "glob.nblist.h"
 #include "glob.spatial.h"
 #include "md.h"
+#include "mod.chgpen.h"
 #include "mod.mplpot.h"
+#include "mod.repel.h"
 #include "platform.h"
 #include "potent.h"
 #include "spatial2.h"
@@ -67,7 +69,7 @@ nblist_t clist_version()
 {
    nblist_t u;
    // First, forget about VDW, only check partial charge models.
-   if (!use_potent(charge_term) /* && !use_potent(solv_term) */) {
+   if (!use_potent(charge_term) /* and !use_potent(solv_term) */) {
       u = NBL_UNDEFINED;
    } else if (!limits::use_clist) {
       u = NBL_DOUBLE_LOOP;
@@ -107,8 +109,9 @@ nblist_t clist_version()
 nblist_t mlist_version()
 {
    nblist_t u;
-   if (!use_potent(mpole_term) && !use_potent(polar_term) &&
-       !use_potent(chgtrn_term) /* && !use_potent(solv_term) */) {
+   if (!use_potent(mpole_term) and !use_potent(polar_term) and
+       !use_potent(chgtrn_term) and
+       !use_potent(repuls_term) /* and !use_potent(solv_term) */) {
       u = NBL_UNDEFINED;
    } else if (!limits::use_mlist) {
       u = NBL_DOUBLE_LOOP;
@@ -236,7 +239,8 @@ static void nblist_alloc(nblist_t version, NBListUnit& nblu, int maxn,
    st.cutoff = cutoff;
    st.buffer = buffer;
 
-   nblu.update_deviceptr(st, WAIT_NEW_Q);
+   nblu.update_deviceptr(st, g::q0);
+   wait_for(g::q0);
 }
 
 
@@ -412,6 +416,8 @@ void nblist_data(rc_op op)
       auto& un2 = mspatial_v2_unit;
       if (op & rc_alloc) {
          if (mplpot::use_chgpen) {
+            spatial_alloc(un2, n, cut, buf, x, y, z, 2, nmdwexclude, mdwexclude,
+                          nrepexclude, repexclude);
          } else {
             spatial_alloc(un2, n, cut, buf, x, y, z, 4, nmdpuexclude,
                           mdpuexclude, nmexclude, mexclude, ndpexclude,
@@ -441,7 +447,11 @@ void nblist_data(rc_op op)
    if (u & NBL_SPATIAL) {
       auto& un2 = uspatial_v2_unit;
       if (op & rc_alloc) {
-         spatial_alloc(un2, n, cut, buf, x, y, z, 1, nuexclude, uexclude);
+         if (mplpot::use_chgpen) {
+            spatial_alloc(un2, n, cut, buf, x, y, z, 1, nwexclude, wexclude);
+         } else {
+            spatial_alloc(un2, n, cut, buf, x, y, z, 1, nuexclude, uexclude);
+         }
       }
       if (op & rc_init) {
          spatial_build(un2);
@@ -507,7 +517,7 @@ void refresh_neighbors()
          unt->x = x;
          unt->y = y;
          unt->z = z;
-         unt.update_deviceptr(*unt, PROCEED_NEW_Q);
+         unt.update_deviceptr(*unt, g::q0);
       }
       nblist_update_acc(unt);
    }
@@ -530,7 +540,7 @@ void refresh_neighbors()
          unt->x = x;
          unt->y = y;
          unt->z = z;
-         unt.update_deviceptr(*unt, PROCEED_NEW_Q);
+         unt.update_deviceptr(*unt, g::q0);
       }
       nblist_update_acc(unt);
    }
@@ -553,7 +563,7 @@ void refresh_neighbors()
          unt->x = x;
          unt->y = y;
          unt->z = z;
-         unt.update_deviceptr(*unt, PROCEED_NEW_Q);
+         unt.update_deviceptr(*unt, g::q0);
       }
       nblist_update_acc(unt);
    }
@@ -576,7 +586,7 @@ void refresh_neighbors()
          unt->x = x;
          unt->y = y;
          unt->z = z;
-         unt.update_deviceptr(*unt, PROCEED_NEW_Q);
+         unt.update_deviceptr(*unt, g::q0);
       }
       nblist_update_acc(unt);
    }

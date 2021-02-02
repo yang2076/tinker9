@@ -1,5 +1,9 @@
 include/*template
 
+# Wiki
+*.wiki
+*.wiki/*
+
 # Manual
 doc/manual/_build/*
 
@@ -17,6 +21,10 @@ Release/*
 # VSCode
 .vscode
 .vscode/*
+
+# bin
+bin/*
+bin*/*
 
 # build
 build/*

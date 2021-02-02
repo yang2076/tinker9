@@ -21,7 +21,7 @@ struct GenericUnitAlloc<GenericUnitVersion::DisableOnDevice>
 {
    static void deallocate(void*) {}
    static void allocate(void**, size_t) {}
-   static void copyin(void*, const void*, size_t, LPFlag) {}
+   static void copyin(void*, const void*, size_t, int) {}
 };
 
 
@@ -38,9 +38,9 @@ struct GenericUnitAlloc<GenericUnitVersion::EnableOnDevice>
       device_memory_allocate_bytes(pp, nb);
    }
 
-   static void copyin(void* d, const void* s, size_t nb, LPFlag flag)
+   static void copyin(void* d, const void* s, size_t nb, int queue)
    {
-      device_memory_copyin_bytes(d, s, nb, flag);
+      device_memory_copyin_bytes_async(d, s, nb, queue);
    }
 };
 
@@ -209,7 +209,7 @@ public:
    /// Gets device pointer to the object.
    const T* deviceptr() const
    {
-      assert(0 <= unit && unit < deviceptrs().size() &&
+      assert(0 <= unit && (size_t)unit < deviceptrs().size() &&
              "const T* GenericUnit::deviceptr() const");
       return deviceptrs()[unit].get();
    }
@@ -226,10 +226,10 @@ public:
    /// \param hobj
    /// The reference to the same object on host that can be accessed by the same
    /// unit number.
-   void update_deviceptr(const T& hobj, LPFlag flag)
+   void update_deviceptr(const T& hobj, int queue)
    {
       assert(&hobj == &this->obj());
-      mem_op::copyin(this->deviceptr(), &hobj, sizeof(T), flag);
+      mem_op::copyin(this->deviceptr(), &hobj, sizeof(T), queue);
    }
 };
 }
