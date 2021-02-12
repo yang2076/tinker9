@@ -20,6 +20,7 @@ enum class evdw_t
    geometric = 21,  ///< Combining rule.
    cubic_mean = 22, ///< Combining rule.
    hhg = 23,        ///< Combinding rule.
+   w_h = 24,        ///< Combinding rule.
 
    lj,    ///< Lennard-Jones 12-6 potential.
    buck,  ///< Buckingham potential.
