@@ -122,6 +122,8 @@ void evdw_data(rc_op op)
          epsrule = evdw_t::cubic_mean;
       else if (str3 == "HHG")
          epsrule = evdw_t::hhg;
+      else if (str3 == "W-H")
+         epsrule = evdw_t::w_h;
       else
          assert(false);
 
