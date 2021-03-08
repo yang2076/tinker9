@@ -27,7 +27,8 @@ void echgtrn_cu1(
    const real* restrict x, const real* restrict y, const real* restrict z,
    const Spatial::SortedAtom* restrict sorted, int nakpl,
    const int* restrict iakpl, int niak, const int* restrict iak,
-   const int* restrict lst, real* restrict chgct, real* restrict dmpct, real f)
+   const int* restrict lst, real* restrict chgct, real* restrict dmpct, real f,
+   chgtrn_t ctrntype)
 {
    constexpr bool do_a = Ver::a;
    constexpr bool do_e = Ver::e;
@@ -114,7 +115,7 @@ void echgtrn_cu1(
          real r = REAL_SQRT(r2);
          e_prec e, de;
          pair_chgtrn<do_g>(r, cut, off, scalea, f, alphai, chgi, alphak, chgk,
-                           e, de);
+                           e, de, ctrntype);
          if CONSTEXPR (do_a)
             if (e != 0 and scalea != 0)
                nctl += 1;
@@ -207,7 +208,7 @@ void echgtrn_cu1(
             real r = REAL_SQRT(r2);
             e_prec e, de;
             pair_chgtrn<do_g>(r, cut, off, 1, f, alphai, chgi, alphak, chgk, e,
-                              de);
+                              de, ctrntype);
             if CONSTEXPR (do_a)
                if (e != 0)
                   nctl += 1;
@@ -303,7 +304,7 @@ void echgtrn_cu1(
             real r = REAL_SQRT(r2);
             e_prec e, de;
             pair_chgtrn<do_g>(r, cut, off, 1, f, alphai, chgi, alphak, chgk, e,
-                              de);
+                              de, ctrntype);
             if CONSTEXPR (do_a)
                if (e != 0)
                   nctl += 1;
@@ -379,12 +380,12 @@ void echgtrn_cu2()
    real f = electric / dielec;
 
 
-   assert(ctrntyp == chgtrn_t::SEPARATE);
    int ngrid = get_grid_size(BLOCK_DIM);
    echgtrn_cu1<Ver><<<ngrid, BLOCK_DIM, 0, g::s0>>>(
       st.n, TINKER_IMAGE_ARGS, nct, ect, vir_ect, dectx, decty, dectz, cut, off,
       st.si1.bit0, nmdwexclude, mdwexclude, mdwexclude_scale, st.x, st.y, st.z,
-      st.sorted, st.nakpl, st.iakpl, st.niak, st.iak, st.lst, chgct, dmpct, f);
+      st.sorted, st.nakpl, st.iakpl, st.niak, st.iak, st.lst, chgct, dmpct, f,
+      ctrntyp);
 }
 
 
