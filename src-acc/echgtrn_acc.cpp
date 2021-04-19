@@ -10,6 +10,7 @@
 #include "switch.h"
 #include "tool/gpu_card.h"
 #include <cassert>
+#include <stdio.h>
 
 namespace tinker {
 #define DEVICE_PTRS                                                            \
@@ -17,7 +18,6 @@ namespace tinker {
 template <class Ver>
 void echgtrn_acc1()
 {
-   assert(ctrntyp == chgtrn_t::SEPARATE);
 
    constexpr bool do_e = Ver::e;
    constexpr bool do_a = Ver::a;
@@ -65,8 +65,9 @@ void echgtrn_acc1()
          if (r2 <= off2) {
             real r = REAL_SQRT(r2);
             MAYBE_UNUSED real e, de;
+            ctrntyp = chgtrn_t::COMBINED;
             pair_chgtrn<do_g>(r, cut, off, 1, f, alphai, chgi, alphak, chgk, e,
-                              de);
+                              de, ctrntyp);
 
             if CONSTEXPR (do_a)
                if (e != 0)
@@ -137,13 +138,15 @@ void echgtrn_acc1()
       if (r2 <= off2) {
          real r = REAL_SQRT(r2);
          MAYBE_UNUSED real e, de;
+         ctrntyp = chgtrn_t::COMBINED;
          pair_chgtrn<do_g>(r, cut, off, mscale, f, alphai, chgi, alphak, chgk,
-                           e, de);
+                           e, de, ctrntyp);
 
          if CONSTEXPR (do_a) {
             real e1, de1;
+            ctrntyp = chgtrn_t::COMBINED;
             pair_chgtrn<do_g>(r, cut, off, 1, f, alphai, chgi, alphak, chgk, e1,
-                              de1);
+                              de1, ctrntyp);
 
             if (mscale == -1 and e1 != 0)
                atomic_add(-1, nct, offset);
