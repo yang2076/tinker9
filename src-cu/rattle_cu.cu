@@ -173,7 +173,7 @@ void constrain_methyl_cu1(
          ynew[id] += dyd;
          znew[id] += dzd;
       }
-      if (eq<HTYPE, RATTLE>()) {
+      if CONSTEXPR (not eq<HTYPE, SHAKE>()) {
          double invdt = 1 / dt;
          vx[ia] += dxa * invdt;
          vy[ia] += dya * invdt;
@@ -396,6 +396,9 @@ void constrain2_methyl_cu1(int nratch2, const int (*restrict iratch2)[3],
          xtermc *= vterm;
          ytermc *= vterm;
          ztermc *= vterm;
+         xtermd *= vterm;
+         ytermd *= vterm;
+         ztermd *= vterm;
          vxx -= (xb3 * xtermb + xc3 * xtermc + xd3 * xtermd);
          vyx -= (yb3 * xtermb + yc3 * xtermc + yd3 * xtermd);
          vzx -= (zb3 * xtermb + zc3 * xtermc + zd3 * xtermd);
