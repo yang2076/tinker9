@@ -26,8 +26,8 @@ void pair_chgtrn(real r, real cut, real off, real mscale, real f, real alphai,
    }
    else if (ctrntyp == chgtrn_t::COMBINED)
    {
-      alphaik = REAL_SQRT(alphai * alphak); 
-      chgik = 0.5 * (chgi + chgk);
+      alphaik = 0.5 * (alphai + alphak); 
+      chgik = REAL_SQRT(chgi * chgk);
       e = -chgik * REAL_EXP(-alphaik * r);
    }
    e *= f;
