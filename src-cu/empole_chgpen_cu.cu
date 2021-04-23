@@ -31,7 +31,7 @@ void empole_chgpen_cu1(
    const int* restrict lst, real* restrict trqx, real* restrict trqy,
    real* restrict trqz, real* restrict pot, const real (*restrict rpole)[10],
    real* restrict pcore, real* restrict pval, const real* restrict palpha,
-   real aewald, real f)
+   real aewald, real f, chgpen_t pentyp)
 {
    constexpr bool do_a = Ver::a;
    constexpr bool do_e = Ver::e;
@@ -192,7 +192,7 @@ void empole_chgpen_cu1(
             qizz[klane],                            //
             ck, dkx, dky, dkz, corek, valk, alphak, //
             qkxx, qkxy, qkxz, qkyy, qkyz, qkzz,     //
-            f, aewald, e, pota, potb, pgrad);
+            f, aewald, e, pota, potb, pgrad, pentyp);
 
          if CONSTEXPR (do_a)
             if (e != 0 and scalea != 0)
@@ -348,7 +348,7 @@ void empole_chgpen_cu1(
                qizz[klane],                            //
                ck, dkx, dky, dkz, corek, valk, alphak, //
                qkxx, qkxy, qkxz, qkyy, qkyz, qkzz,     //
-               f, aewald, e, pota, potb, pgrad);
+               f, aewald, e, pota, potb, pgrad, pentyp);
 
             if CONSTEXPR (do_a)
                if (e != 0)
@@ -498,7 +498,7 @@ void empole_chgpen_cu1(
                qizz[klane],                            //
                ck, dkx, dky, dkz, corek, valk, alphak, //
                qkxx, qkxy, qkxz, qkyy, qkyz, qkzz,     //
-               f, aewald, e, pota, potb, pgrad);
+               f, aewald, e, pota, potb, pgrad, pentyp);
 
             if CONSTEXPR (do_a)
                if (e != 0)
@@ -603,7 +603,7 @@ void empole_chgpen_cu()
       st.n, TINKER_IMAGE_ARGS, nem, em, vir_em, demx, demy, demz, off,
       st.si1.bit0, nmdwexclude, mdwexclude, mdwexclude_scale, st.x, st.y, st.z,
       st.sorted, st.nakpl, st.iakpl, st.niak, st.iak, st.lst, trqx, trqy, trqz,
-      pot, rpole, pcore, pval, palpha, aewald, f);
+      pot, rpole, pcore, pval, palpha, aewald, f, pentyp);
 }
 
 

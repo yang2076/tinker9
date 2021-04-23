@@ -4,6 +4,7 @@
 #include "nblist.h"
 #include "potent.h"
 #include "tool/host_zero.h"
+#include "tool/io_fort_str.h"
 #include <tinker/detail/chgpen.hh>
 #include <tinker/detail/mplpot.hh>
 #include <tinker/detail/potent.hh>
@@ -48,6 +49,11 @@ void empole_chgpen_data(rc_op op)
    }
 
    if (op & rc_init) {
+      fstr_view pentype = mplpot::pentyp;
+      if (pentype == "GORDON1")
+         pentyp = chgpen_t::GORDON1;
+      else if (pentype == "GORDON2")
+         pentyp = chgpen_t::GORDON2;
    }
 }
 

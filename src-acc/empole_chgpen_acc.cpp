@@ -92,7 +92,7 @@ void empole_chgpen_acc1()
                rpole[k][mpl_pme_z], corek, valk, alphak, rpole[k][mpl_pme_xx],
                rpole[k][mpl_pme_xy], rpole[k][mpl_pme_xz], rpole[k][mpl_pme_yy],
                rpole[k][mpl_pme_yz], rpole[k][mpl_pme_zz], f, aewald, e, pota,
-               potb, pgrad);
+               potb, pgrad, pentyp);
 
             if CONSTEXPR (do_a)
                if (e != 0)
@@ -225,7 +225,7 @@ void empole_chgpen_acc1()
             rpole[k][mpl_pme_z], corek, valk, alphak, rpole[k][mpl_pme_xx],
             rpole[k][mpl_pme_xy], rpole[k][mpl_pme_xz], rpole[k][mpl_pme_yy],
             rpole[k][mpl_pme_yz], rpole[k][mpl_pme_zz], f, 0, e, pota, potb,
-            pgrad);
+            pgrad, pentyp);
 
          if CONSTEXPR (do_a)
             if (mscale == -1 and e != 0)
@@ -415,6 +415,14 @@ void empole_generic_ewald_recip_acc()
 
 void empole_chgpen_nonewald_acc(int vers, int use_cf)
 {
+	 if (pentyp == chgpen_t::GORDON1) {
+	 		printf("GORDON1 \n");
+	 }
+	 if (pentyp == chgpen_t::GORDON2) {
+	 		printf("GORDON2 \n");
+	 }
+	
+
    if (use_cf) {
       if (vers == calc::v0) {
          // empole_chgpen_acc1<calc::V0, NON_EWALD, 1>();

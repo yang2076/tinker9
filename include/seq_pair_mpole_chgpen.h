@@ -2,6 +2,7 @@
 #include "elec.h"
 #include "md.h"
 #include "seq_damp.h"
+#include "seq_damp_aplus.h"
 #include "seq_damp_hippo.h"
 #include "seq_pair_mpole.h"
 
@@ -17,7 +18,7 @@ void pair_mpole_chgpen(                             //
    real ck, real dkx, real dky, real dkz, real corek, real valk, real alphak,
    real qkxx, real qkxy, real qkxz, real qkyy, real qkyz, real qkzz, //
    real f, real aewald, real& restrict e, real& restrict poti,
-   real& restrict potk, PairMPoleGrad& restrict pgrad)
+   real& restrict potk, PairMPoleGrad& restrict pgrad, chgpen_t pentyp)
 {
    real r = REAL_SQRT(r2);
    real invr1 = REAL_RECIP(r);
@@ -73,11 +74,19 @@ void pair_mpole_chgpen(                             //
    real rr1i, rr3i, rr5i, rr7i, rr1k, rr3k, rr5k, rr7k, rr1ik, rr3ik, rr5ik,
       rr7ik, rr9ik, rr11ik;
 
-   // Compute damping factors
+	 // Compute damping factors
    if CONSTEXPR (do_g) {
-      damp_pole_v2<11>(dmpik, dmpi, dmpk, r, alphai, alphak);
+	 		if (pentyp == chgpen_t::GORDON1) {
+      	damp_pole_v2<11>(dmpik, dmpi, dmpk, r, alphai, alphak);
+			} else {
+      	damp_gordon2<11>(dmpik, dmpi, dmpk, r, alphai, alphak);
+			}
    } else {
-      damp_pole_v2<9>(dmpik, dmpi, dmpk, r, alphai, alphak);
+	 		if (pentyp == chgpen_t::GORDON1) {
+      	damp_pole_v2<9>(dmpik, dmpi, dmpk, r, alphai, alphak);
+			} else {
+      	damp_gordon2<9>(dmpik, dmpi, dmpk, r, alphai, alphak);
+			}
    }
    //
 
