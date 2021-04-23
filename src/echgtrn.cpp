@@ -4,6 +4,7 @@
 #include "potent.h"
 #include "tool/darray.h"
 #include "tool/host_zero.h"
+#include "tool/io_fort_str.h"
 #include <tinker/detail/chgtrn.hh>
 #include <tinker/detail/ctrpot.hh>
 
@@ -52,6 +53,12 @@ void echgtrn_data(rc_op op)
 
 
    if (op & rc_init) {
+      fstr_view ctrntype = ctrpot::ctrntyp;
+      if (ctrntype == "SEPARATE")
+         ctrntyp = chgtrn_t::SEPARATE;
+      else if (ctrntype == "COMBINED")
+         ctrntyp = chgtrn_t::COMBINED;
+
       darray::copyin(g::q0, n, chgct, chgtrn::chgct);
       std::vector<real> dmpctvec(n);
       for (int i = 0; i < n; ++i) {

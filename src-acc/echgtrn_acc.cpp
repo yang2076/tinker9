@@ -60,12 +60,10 @@ void echgtrn_acc1()
          real zr = z[k] - zi;
          real chgk = chgct[k];
          real alphak = dmpct[k];
-
          real r2 = image2(xr, yr, zr);
          if (r2 <= off2) {
             real r = REAL_SQRT(r2);
             MAYBE_UNUSED real e, de;
-            ctrntyp = chgtrn_t::COMBINED;
             pair_chgtrn<do_g>(r, cut, off, 1, f, alphai, chgi, alphak, chgk, e,
                               de, ctrntyp);
 
@@ -138,13 +136,11 @@ void echgtrn_acc1()
       if (r2 <= off2) {
          real r = REAL_SQRT(r2);
          MAYBE_UNUSED real e, de;
-         ctrntyp = chgtrn_t::COMBINED;
          pair_chgtrn<do_g>(r, cut, off, mscale, f, alphai, chgi, alphak, chgk,
                            e, de, ctrntyp);
 
          if CONSTEXPR (do_a) {
             real e1, de1;
-            ctrntyp = chgtrn_t::COMBINED;
             pair_chgtrn<do_g>(r, cut, off, 1, f, alphai, chgi, alphak, chgk, e1,
                               de1, ctrntyp);
 

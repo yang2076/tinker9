@@ -26,12 +26,11 @@ void pair_chgtrn(real r, real cut, real off, real mscale, real f, real alphai,
    }
    else if (ctrntyp == chgtrn_t::COMBINED)
    {
-      alphaik = REAL_SQRT(alphai * alphak); 
-      chgik = 0.5 * (chgi + chgk);
+      alphaik = 0.5*(alphai + alphak); 
+      chgik = REAL_SQRT(chgi*chgk);
       e = -chgik * REAL_EXP(-alphaik * r);
    }
    e *= f;
-   //printf("%10.5f %10.5f %10.5f %10.5f\n",alphaik, chgik, r, e);
 
    if CONSTEXPR (DO_G) {
       if (ctrntyp == chgtrn_t::SEPARATE) {
