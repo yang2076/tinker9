@@ -55,7 +55,6 @@ void x_analyze(int, char**)
    flags += (calc::energy + calc::grad + calc::virial + calc::analyz);
    rc_flag = flags;
    initialize();
-   print(stdout, "OK  %8d", ctrntyp_index);
 
 
    auto failed = std::string::npos;

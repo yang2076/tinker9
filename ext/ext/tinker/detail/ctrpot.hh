@@ -4,7 +4,6 @@
 
 namespace tinker { namespace ctrpot {
 extern char (&ctrntyp)[8];
-extern int ctrntyp_index;
 
 #ifdef TINKER_FORTRAN_MODULE_CPP
 extern "C" char TINKER_MOD(ctrpot, ctrntyp)[8];
