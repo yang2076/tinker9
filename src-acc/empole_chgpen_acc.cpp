@@ -415,13 +415,6 @@ void empole_generic_ewald_recip_acc()
 
 void empole_chgpen_nonewald_acc(int vers, int use_cf)
 {
-	 if (pentyp == chgpen_t::GORDON1) {
-	 		printf("GORDON1 \n");
-	 }
-	 if (pentyp == chgpen_t::GORDON2) {
-	 		printf("GORDON2 \n");
-	 }
-	
 
    if (use_cf) {
       if (vers == calc::v0) {
